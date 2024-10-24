@@ -1,0 +1,56 @@
+{
+  "name": "chromium_hands",
+  "description": "Quick extension to make my web automation development cycles a little more comfy.",
+  "homepage_url": "https://github.com/e299a1/chromium_hands",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "chromium_hands",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "64": "assets/icons/icon64.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "64": "assets/icons/icon64.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "run_at" : "document_start",
+      "js": ["src/content/before.js"],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    },
+    {
+      "run_at" : "document_idle",
+      "js": ["src/content/after.js"],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "permissions": [
+    "tabs",
+    "scripting",           
+    "contextMenus",
+    "downloads",
+    "webRequest",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ]
+}
