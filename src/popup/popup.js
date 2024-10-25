@@ -273,6 +273,10 @@ async function modifyDOM() {
                             }
                         }
                     }))
+					.then(await (async () => {
+						const response = await chrome.runtime.sendMessage({referrer: site_atual, filename: file_atual});
+						console.log(response)
+					 })())
                     .then(await pegar_elemento(document, "[data-test-id=export-modal-export-button]", '*', 15).then((elm) => {
                         if (elm == 'timeout') { console.log(' --- Timeout'); interrompido = true } else {
                             if (!interrompido) {
@@ -402,7 +406,7 @@ async function modifyDOM() {
 
         //console.log('---------------------------------------------------------------------------------------------------------');
         //console.log('Testing Recipe');
-
+		/*
         var debug = true;
 
         site_atual = window.location.origin
@@ -441,7 +445,7 @@ async function modifyDOM() {
                 elm.click()
              }))
         }
-        //Renomear download
+        */
 
 
         //console.log('---------------------------------------------------------------------------------------------------------');
@@ -454,33 +458,40 @@ async function modifyDOM() {
         ////	[x] extensão: Estrutura e funcionalidades já existentes
         ////	[x] extensão: Interceptar e renomear download
         ////	[x] extensão: Botar string correta no nome do arquivo ("data_atual/data_filtrada.xlsx")
+        ////	[ ] receita:  Subir dados pro GitHub
         ////	[ ] extensão: Organizar código e subir repo
         ////	[ ] extensão: Criar separação entre funções da extensão e receitas do usuário
         ////	[ ] receita:  Extrair histórico do último ano em pastas organizadinhas
-        ////	[ ] receita:  Subir dados pro GitHub
         ////-----------------------------------------------------------------------------------
 
-        //var debug = true;
-        //desvio_inicio	= -0
-        //desvio_fim		= -365
-        //passo			= -1
-        //
-        //await pegar_elemento(document, 'div.column-left', '*', 30).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm.remove()}})
-        //await pegar_elemento(document, 'div.column-right', '*', 30).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm.remove()}})
-        //await pegar_elemento(document, '[class="btn btn-primary"]', '*', 30, true).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm[3].remove()}})
-        //	
-        //for (let desvio=desvio_inicio; desvio>=desvio_fim; desvio=desvio+passo) {
-        //	d = data('d', desvio)
-        //	d = d[0]+'-'+("00"+d[1]).slice(-2)+'-'+("00"+d[2]).slice(-2) 
-        //	console.log(desvio + "/" + desvio_fim + "  -->  " + d);
-        //	await esperar_relatorio();
-        //	r = await filtrar_data('Atualização do ticket - Data', d);
-        //	console.log('retorno ='+r)
-        //	if (r == 'Ok!') {
-        //		await esperar_relatorio();
-        //		await exportar_excel();
-        //	}
-        //}
+        var debug = true;
+		
+        site_atual = window.location.origin
+        data_atual = data('d', 0)
+        data_atual = data_atual[0]+'-'+("00"+data_atual[1]).slice(-2)+'-'+("00"+data_atual[2]).slice(-2) 
+
+        desvio_inicio	= -0
+        desvio_fim		= -365
+        passo			= -1
+		
+        await pegar_elemento(document, 'div.column-left', '*', 30).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm.remove()}})
+        await pegar_elemento(document, 'div.column-right', '*', 30).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm.remove()}})
+        await pegar_elemento(document, '[class="btn btn-primary"]', '*', 30, true).then((elm) => { if(elm == 'timeout'){console.log(' --- Timeout')}else{elm[3].remove()}})
+        	
+        for (let desvio=desvio_inicio; desvio>=desvio_fim; desvio=desvio+passo) {
+        	d = data('d', desvio)
+        	d = d[0]+'-'+("00"+d[1]).slice(-2)+'-'+("00"+d[2]).slice(-2) 
+            file_atual = data_atual+'/'+d
+          	console.log(desvio + "/" + desvio_fim + "  -->  " + file_atual);
+			
+        	await esperar_relatorio();
+        	r = await filtrar_data('Atualização do ticket - Data', d);
+        	console.log('retorno ='+r)
+        	if (r == 'Ok!') {
+        		await esperar_relatorio();
+        		await exportar_excel();
+        	}
+        }
 
         //console.log('---------------------------------------------------------------------------------------------------------');
         //console.log('Setdown');
