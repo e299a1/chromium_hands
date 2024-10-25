@@ -1,3 +1,4 @@
+
 //--------------------------------------------------------------------------------------------------------------------
 // this code will bind the modifyDOM function to the btnShowOrangeDiv click event
 document.getElementById('btnRun').addEventListener('click', function() {
@@ -12,8 +13,8 @@ document.getElementById('btnRun').addEventListener('click', function() {
 // this code will be executed when the button btnShowOrangeDiv is clicked
 async function modifyDOM() {
     try {
-        console.log('---------------------------------------------------------------------------------------------------------');
-        console.log('Base Utils');
+        //console.log('---------------------------------------------------------------------------------------------------------');
+        //console.log('Base Utils');
 
         function data(intervalo, desvio) {
             if (intervalo == 'd') {
@@ -108,8 +109,8 @@ async function modifyDOM() {
             return new Promise(resolve => setTimeout(resolve, ms));
         };
 
-        console.log('---------------------------------------------------------------------------------------------------------');
-        console.log('Compound Utils');
+        //console.log('---------------------------------------------------------------------------------------------------------');
+        //console.log('Compound Utils');
 
         async function esperar_relatorio() {
             if (debug) { console.log("Esperando relatório carregar...") };
@@ -388,8 +389,8 @@ async function modifyDOM() {
             };
         };
 
-        console.log('---------------------------------------------------------------------------------------------------------');
-        console.log('Setup');
+        //console.log('---------------------------------------------------------------------------------------------------------');
+        //console.log('Setup');
 
         const div = document.createElement('div');
         div.id = 'GhastHandWarning'
@@ -399,23 +400,47 @@ async function modifyDOM() {
         document.body.style.zoom = "64%";
         console.log(div.textContent);
 
-        console.log('---------------------------------------------------------------------------------------------------------');
-        console.log('Testing Recipe');
+        //console.log('---------------------------------------------------------------------------------------------------------');
+        //console.log('Testing Recipe');
 
         var debug = true;
 
-        console.log(0)
-        await esperar_tempo(2);
-        console.log(document.querySelector("#\\:R55ab\\: > span"))
-        console.log(document.querySelector("#\\:R55ab\\: > span").click())
-        await esperar_tempo(2)
-        console.log(document.querySelector("#\\:rv\\:--label"))
-        console.log(document.querySelector("#\\:rv\\:--label").click())
-        await esperar_tempo(2)
-        console.log(document.querySelector("#\\:R55ab\\: > span"))
-        console.log(document.querySelector("#\\:R55ab\\: > span").click())
-        await esperar_tempo(2)
-        console.log(1)
+        site_atual = window.location.origin
+        data_atual = data('d', 0)
+        data_atual = data_atual[0]+'-'+("00"+data_atual[1]).slice(-2)+'-'+("00"+data_atual[2]).slice(-2) 
+
+        desvio_inicio	= -0
+        desvio_fim		= -9
+        passo			= -1
+        
+        for (let desvio=desvio_inicio; desvio>=desvio_fim; desvio=desvio+passo) {
+        	d = data('d', desvio)
+        	d = d[0]+'-'+("00"+d[1]).slice(-2)+'-'+("00"+d[2]).slice(-2) 
+            file_atual = data_atual+'/'+d
+          	console.log(desvio + "/" + desvio_fim + "  -->  " + file_atual);
+        
+             await esperar_tempo(1)
+            .then(await esperar_tempo(1))
+            .then(() => { if (debug) { console.log("Clicando pra abrir o popup") } })
+            .then(await pegar_elemento(document, '[id=":R55ab:"]', '*', 30).then((elm) => {
+                elm.click()
+             }))
+            .then(await esperar_tempo(1))
+            .then(await (async () => {
+                const response = await chrome.runtime.sendMessage({referrer: site_atual, filename: file_atual});
+                console.log(response)
+             })())
+            .then(await esperar_tempo(1))
+            .then(() => { if (debug) { console.log("Clicando download") } })
+            .then(await pegar_elemento(document, '[href="/e299a1/chromium_hands/archive/refs/heads/main.zip"]', '*', 30).then((elm) => {
+                elm.click()
+             }))
+            .then(await esperar_tempo(1))
+            .then(() => { if (debug) { console.log("Clicando pra fechar o popup") } })
+            .then(await pegar_elemento(document, '[id=":R55ab:"]', '*', 30).then((elm) => {
+                elm.click()
+             }))
+        }
         //Renomear download
 
 
@@ -428,7 +453,7 @@ async function modifyDOM() {
         ////	[x] receita:  Filtrar e extrair sequencia de datas em loop
         ////	[x] extensão: Estrutura e funcionalidades já existentes
         ////	[x] extensão: Interceptar e renomear download
-        ////	[ ] extensão: Botar string correta no nome do arquivo ("data_atual/data_filtrada.xlsx")
+        ////	[x] extensão: Botar string correta no nome do arquivo ("data_atual/data_filtrada.xlsx")
         ////	[ ] extensão: Organizar código e subir repo
         ////	[ ] extensão: Criar separação entre funções da extensão e receitas do usuário
         ////	[ ] receita:  Extrair histórico do último ano em pastas organizadinhas
@@ -457,12 +482,11 @@ async function modifyDOM() {
         //	}
         //}
 
-        console.log('---------------------------------------------------------------------------------------------------------');
-        console.log('Setdown');
+        //console.log('---------------------------------------------------------------------------------------------------------');
+        //console.log('Setdown');
 
         document.querySelectorAll('[id="GhastHandWarning"]').forEach((e) => { e.remove() });
         document.body.style.zoom = "100%";
-        console.log('Ghast is done and down.');
 
     } catch (error) {
         console.error("Error:", error);
