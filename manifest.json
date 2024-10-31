@@ -42,7 +42,8 @@
     "service_worker": "src/background.js"
   },
   "permissions": [
-    "tabs",
+    "tabs",    
+	"activeTab",
     "scripting",           
     "contextMenus",
     "downloads",
@@ -50,7 +51,10 @@
     "storage"
   ],
   "host_permissions": [
+    "*://*/*",
+	"<all_urls>",
     "https://*/*",
-    "http://*/*"
+    "http://*/*",
+    "file://*/*"
   ]
 }
